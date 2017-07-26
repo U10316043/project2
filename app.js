@@ -11,8 +11,10 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var bcrypt = require('bcrypt-nodejs');
 // DB
+var Article = require('./models/article.js');
 var User = require('./models/user.js');
 var config = require('./db');
+
 mongoose.connect(config.connection);
 
 
@@ -49,6 +51,7 @@ passport.use('signup', new LocalStrategy({
   passReqToCallback: true,
   }, 
   function (req, username, password, done) {
+    console.log(req.body);
     var findOrCreateUser = function () {
       User.findOne({ username: username }, function (err, user) {
         if (err) {
@@ -59,6 +62,7 @@ passport.use('signup', new LocalStrategy({
         } else {
           var newUser = new User();
           newUser.username = username;
+          newUser.nickname = req.body.nickname;
           newUser.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10), null);
           newUser.save(function (err, user) {
             if (err) {
@@ -69,10 +73,34 @@ passport.use('signup', new LocalStrategy({
         }
       });
   };
-
   process.nextTick(findOrCreateUser)
 }));
+
+var CreateArticle = function (req,err) {
+  if (err) {
+    return done(err);
+  }
+  else {
+    var newArticle = new Article();
+    newArticle.articleTitle = req.body.articleTitle;
+    newArticle.articleBody = req.body.articleBody;
+    newArticle.save(function (err, user) {
+      console.log("success!!!!!!!!!!!!!!!success");
+      if (err) {
+        throw err;
+      }
+      return done(null, user);
+    });
+  }
+};
+
+CreateArticle();
+
+
+
+
 var index = require('./routes/index');
+var article = require('./routes/article');
 var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -95,6 +123,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use('/', index);
+// app.use('/home', article);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
