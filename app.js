@@ -14,7 +14,12 @@ var bcrypt = require('bcrypt-nodejs');
 var Article = require('./models/article.js');
 var User = require('./models/user.js');
 var config = require('./db');
+//
+var index = require('./routes/index');
+var articleRouter = require('./routes/article');
+var app = express();
 
+//
 mongoose.connect(config.connection);
 
 
@@ -72,42 +77,35 @@ passport.use('signup', new LocalStrategy({
           });
         }
       });
-  };
-  process.nextTick(findOrCreateUser)
+    };
+    process.nextTick(findOrCreateUser)
 }));
-
-var CreateArticle = function (req,err) {
-  if (err) {
-    return done(err);
-  }
-  else {
+app.get('/addArticle', function(req, res){
+ console.log('123');
+});
+/*app.get('/addArticle', function(req, res) {
+  console.log('hi我進來了');
+  var findOrCreateArticle = function () {
+      
+    if (err) {
+      return done(err);
+    };
     var newArticle = new Article();
     newArticle.articleTitle = req.body.articleTitle;
     newArticle.articleBody = req.body.articleBody;
-    newArticle.save(function (err, user) {
-      console.log("success!!!!!!!!!!!!!!!success");
+    newArticle.save(function (err) {
       if (err) {
         throw err;
       }
-      return done(null, user);
+      return done(null);
     });
   }
-};
-
-CreateArticle();
-
-
-
-
-var index = require('./routes/index');
-var article = require('./routes/article');
-var app = express();
-// view engine setup
+});*/
+//view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'jade');
 app.set('view engine', 'ejs');
-
-// uncomment after placing your favicon in /public
+//uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -123,7 +121,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use('/', index);
-// app.use('/home', article);
+app.use('/', articleRouter);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

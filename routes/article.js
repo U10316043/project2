@@ -17,6 +17,8 @@ var passport = require('passport');
 // })
 
 router.post('/addArticle', function(req, res, next) {
+    console.log('router進來了');
     res.redirect('/home');
 });
 
+module.exports = router;

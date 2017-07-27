@@ -34,29 +34,31 @@
                      <button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#newArticle"><span class="glyphicon glyphicon-plus"></span>新增文章</button>
                 
                 <!--Modal-->
-                <form action="/addArticle" method="POST"> 
-                    <div class="modal fade" id = "newArticle" role="dialog" aria-labelledby="newArticleLabel">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title"><%= user.nickname %></h5>
-                                    <button type = "button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <input type="text" class="form-control" name="articleTitle" id="articleTitle" placeholder="文章標題" require="true" autofocus>
+                <div class="modal fade" id = "newArticle" role="dialog" aria-labelledby="newArticleLabel">
+                    <form class="form-horizontal" role="form" enctype="multipart/form-data" action="/addArticle" method="post"> 
+                        
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"><%= user.nickname %></h5>
+                                        <button type = "button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     </div>
-                                    <label >文章內容</label>
-                                    <textarea class="form-control" name="articleBody" id="articleArea" rows="5"></textarea>
-                                </div>
-                                <div calss="modal-footer">
-                                    <button type = "button" class="btn btn-default " data-dismiss="modal">關閉</button>
-                                    <button type = "button" class="btn btn-default " type="submit" data-dismiss="modal">儲存變更</button>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <input type="text" class="form-control" name="articleTitle" id="articleTitle" placeholder="文章標題" require="true" autofocus>
+                                        </div>
+                                        <label >文章內容</label>
+                                        <textarea class="form-control" name="articleBody" id="articleArea" rows="5"></textarea>
+                                    </div>
+                                    <div calss="modal-footer">
+                                        <button type = "button" class="btn btn-default " data-dismiss="modal">關閉</button>
+                                        <button type = "submit" class="btn btn-default ">儲存變更</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </form>
+                        
+                    </form>
+                </div>
                 <% } %>
                 <div class = "panel panel-default" id="perArticle">
                     <div class = "panel panel-heading">
