@@ -33,5 +33,18 @@ router.get('/deleteArticle/:article_id',function (req, res) {
     });
     res.redirect('/home');
 })
-
+//修改文章
+router.post('/editArticle/:article_id',function (req, res) {
+    console.log('修改文章');
+    Article.findById(req.params.article_id, function(err, todo){
+        todo.articleTitleTable = req.body.articleTitle;
+        todo.articleBodyTable = req.body.articleBody;
+        todo.save(function (err, todo) {
+            if (err) {  //angular,react,vue
+                throw err;
+            } 
+        });
+    });
+    res.redirect('/home');
+})
 module.exports = router;
