@@ -22,5 +22,17 @@
     "passport-local": "^1.0.0",
     "pug": "~2.0.0-beta11",
     "serve-favicon": "~2.4.2"
-  }
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/U10316043/project2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/U10316043/project2/issues"
+  },
+  "homepage": "https://github.com/U10316043/project2#readme",
+  "description": ""
 }

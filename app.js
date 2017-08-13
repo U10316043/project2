@@ -11,7 +11,7 @@ var session = require('express-session');
 var flash = require('connect-flash');
 var bcrypt = require('bcrypt-nodejs');
 // DB
-var Article = require('./models/article.js');
+var Article = require('./models/articlemodel.js');
 var User = require('./models/user.js');
 var config = require('./db');
 //
@@ -80,9 +80,9 @@ passport.use('signup', new LocalStrategy({
     };
     process.nextTick(findOrCreateUser)
 }));
-app.get('/addArticle', function(req, res){
- console.log('123');
-});
+// app.get('/addArticle', function(req, res){
+//  console.log('123');
+// });
 /*app.get('/addArticle', function(req, res) {
   console.log('hi我進來了');
   var findOrCreateArticle = function () {
