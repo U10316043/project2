@@ -7,6 +7,7 @@ var Article = require('../models/articlemodel.js');
 var productlist = {};
 
 
+
 router.get('/', function (req, res, next) {
   res.render('index', { message: req.flash('info') });
 });
@@ -32,15 +33,30 @@ router.post('/signin', passport.authenticate('login', {
   failureRedirect: '/',
   failureFlash: true
 }));
-router.get('/signup', function (req, res, next) {
+router.get('/getsignup', function (req, res, next) {
   res.render('signup', { message: req.flash('info') });
-});
+}); 
 //註冊頁
-router.post('/signup', passport.authenticate('signup', {
-  successRedirect: '/home',
-  failureRedirect: '/signup',
+router.post('/postsignup',passport.authenticate('ppsignup', {
+  
+  failureRedirect: '/getsignup',
   failureFlash: true
-}));
+}),function(req,res){
+  console.log("dasdadadaddada")
+  
+  return res.redirect('/home');
+});
+
+
+
+
+// router.post('/postsignup',function(req,res,next){
+//   console.log(req);
+//   console.log("aaaa");
+// });
+
+
+
 
 router.get('/signout', function (req, res, next) {
   req.logout()

@@ -17,8 +17,11 @@ var config = require('./db');
 //
 var index = require('./routes/index');
 var articleRouter = require('./routes/article');
-var app = express();
 
+
+var cors = require('cors')
+var app = express();
+app.use(cors())
 //
 mongoose.connect(config.connection);
 
@@ -52,17 +55,24 @@ passport.use('login', new LocalStrategy({
     })
   }
 ));
-passport.use('signup', new LocalStrategy({
+passport.use('ppsignup', new LocalStrategy(
+  {
   passReqToCallback: true,
   }, 
   function (req, username, password, done) {
-    console.log(req.body);
+    console.log("ppsignup pre");
     var findOrCreateUser = function () {
       User.findOne({ username: username }, function (err, user) {
         if (err) {
-          return done(err);
+          var message = [];
+          message.push(capitalize(err.errors[error].message));
+          req.flash('error', "This email is already in our database.");          
+          return done(err, false, {info:'輸入有誤'});
+          //throw(error)
+          
         }
         if (user) {
+          console.log('User already exists hahahahahha!!!!')
           return done(null, false, req.flash('info', 'User already exists'));
         } else {
           var newUser = new User();
@@ -73,34 +83,16 @@ passport.use('signup', new LocalStrategy({
             if (err) {
               throw err;
             }
-            return done(null, user);
+            { json: { user: user } }
+            return done(null, user, req.flash('info', '已經進入註冊函數'));
+            
           });
         }
       });
     };
     process.nextTick(findOrCreateUser)
 }));
-// app.get('/addArticle', function(req, res){
-//  console.log('123');
-// });
-/*app.get('/addArticle', function(req, res) {
-  console.log('hi我進來了');
-  var findOrCreateArticle = function () {
-      
-    if (err) {
-      return done(err);
-    };
-    var newArticle = new Article();
-    newArticle.articleTitle = req.body.articleTitle;
-    newArticle.articleBody = req.body.articleBody;
-    newArticle.save(function (err) {
-      if (err) {
-        throw err;
-      }
-      return done(null);
-    });
-  }
-});*/
+
 //view engine setup
 app.set('views', path.join(__dirname, 'views'));
 //app.set('view engine', 'jade');
@@ -117,17 +109,24 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
+
+
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use('/', index);
 app.use('/', articleRouter);
+
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use(function(req, res, next) {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+//   res.header("Access-Control-Allow-Methods","GET, POST, PUT, DELETE, PATCH, OPTIONS");
+//   next(err);
+// });
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
